@@ -1,0 +1,30 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+
+# Logs
+*.log
+.codex-log/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+# Local generated artifacts
+*.tmp

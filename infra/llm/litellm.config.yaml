@@ -1,0 +1,44 @@
+model_list:
+  - model_name: classifier
+    litellm_params:
+      model: openai/local-classifier
+      api_base: http://vllm-classifier.ai-runtime.svc.cluster.local:8000/v1
+      api_key: os.environ/VLLM_API_KEY
+
+  - model_name: extractor
+    litellm_params:
+      model: openai/local-extractor
+      api_base: http://vllm-extractor.ai-runtime.svc.cluster.local:8000/v1
+      api_key: os.environ/VLLM_API_KEY
+
+  - model_name: writer
+    litellm_params:
+      model: openai/local-writer
+      api_base: http://vllm-writer.ai-runtime.svc.cluster.local:8000/v1
+      api_key: os.environ/VLLM_API_KEY
+
+  - model_name: coder
+    litellm_params:
+      model: openai/local-coder
+      api_base: http://vllm-coder.ai-runtime.svc.cluster.local:8000/v1
+      api_key: os.environ/VLLM_API_KEY
+
+  - model_name: judge
+    litellm_params:
+      model: openai/local-judge
+      api_base: http://vllm-judge.ai-runtime.svc.cluster.local:8000/v1
+      api_key: os.environ/VLLM_API_KEY
+
+  - model_name: dev-ollama
+    litellm_params:
+      model: ollama_chat/gemma3
+      api_base: http://ollama.ai-runtime.svc.cluster.local:11434
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  request_timeout: 120
+
+router_settings:
+  routing_strategy: simple-shuffle
+  num_retries: 2
+  timeout: 120

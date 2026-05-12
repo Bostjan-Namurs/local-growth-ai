@@ -1,0 +1,191 @@
+id: bike_rental
+name: Bike Rental
+version: 1.0.0
+status: draft
+
+vertical:
+  type: rental
+  subtype: bike_rental
+  app_pattern: rental_booking
+  default_template: rental-booking-pwa
+
+business_problem:
+  summary: >
+    Bike rental businesses need a fast mobile website where tourists and local
+    customers can view rental options, prices, pickup rules, return rules, and
+    request or book bikes online.
+  common_gaps:
+    - no website
+    - only social media presence
+    - unclear pricing
+    - no online booking request form
+    - no multilingual tourist content
+    - no route recommendations
+    - no group booking form
+
+recommended_solution:
+  package_id: bike_rental_booking_plus
+  app_type: website_pwa
+  primary_goal: increase rental bookings
+  secondary_goals:
+    - reduce phone calls
+    - show clear pricing
+    - support tourist customers
+    - improve local SEO
+    - support group rental inquiries
+
+pages:
+  - id: home
+    required: true
+    sections:
+      - hero
+      - featured_bikes
+      - how_it_works
+      - pricing_preview
+      - route_or_tourist_tip_preview
+      - location
+      - booking_cta
+
+  - id: bikes
+    required: true
+    sections:
+      - bike_catalog
+      - filters
+      - add_ons
+
+  - id: pricing
+    required: true
+    sections:
+      - pricing_table
+      - deposit_info
+      - group_discount_info
+
+  - id: booking
+    required: true
+    sections:
+      - rental_form
+      - pickup_return_rules
+      - confirmation_message
+
+  - id: routes
+    required: false
+    sections:
+      - recommended_routes
+      - tourist_tips
+      - safety_note_placeholder
+
+  - id: group_rentals
+    required: false
+    sections:
+      - group_booking_form
+      - event_or_company_rental_text
+
+  - id: faq
+    required: true
+
+  - id: contact
+    required: true
+
+  - id: policies
+    required: true
+    sections:
+      - deposit_policy
+      - cancellation_policy
+      - waiver_placeholder
+
+features:
+  required:
+    - rental_catalog
+    - rental_booking_form
+    - pickup_return_rules
+    - pricing_table
+    - seo_local_business
+    - responsive_design
+    - admin_approval_before_deploy
+
+  optional:
+    - payment_deposit
+    - inventory_availability
+    - multilingual_content
+    - route_recommendations
+    - group_booking
+    - hotel_delivery
+    - partner_landing_pages
+    - waiver_upload
+
+data_requirements:
+  required:
+    - business_name
+    - business_address
+    - business_phone
+    - business_email
+    - opening_hours
+    - rental_items
+    - pricing_rules
+    - pickup_rules
+    - return_rules
+    - cancellation_policy
+
+  optional:
+    - logo
+    - brand_colors
+    - gallery_photos
+    - route_descriptions
+    - partner_hotels
+    - social_links
+    - deposit_policy
+    - payment_provider
+    - supported_languages
+
+ai_generation_rules:
+  allowed_to_generate:
+    - website copy
+    - generic FAQ drafts
+    - SEO title and meta description
+    - campaign ideas
+    - route page placeholder content
+    - booking flow description
+    - customer onboarding questions
+
+  must_mark_as_placeholder:
+    - exact prices
+    - exact inventory availability
+    - legal waiver text
+    - insurance terms
+    - deposit amount
+    - route safety claims
+    - partner hotel names
+
+  forbidden:
+    - inventing reviews
+    - inventing partnerships
+    - inventing exact availability
+    - making legal or safety guarantees
+    - claiming official tourism certification without source
+    - inventing insurance coverage
+
+lead_scoring:
+  high_opportunity:
+    - no website
+    - only social media presence
+    - no online booking
+    - unclear pricing
+    - tourist-heavy location
+    - no multilingual pages
+  lower_priority:
+    - modern booking system already present
+    - enterprise/franchise platform
+    - inactive business signals
+    - no reachable contact
+
+qa_checks:
+  - booking form validates rental pickup date/time
+  - booking form validates return date/time after pickup date/time
+  - at least one rental item exists
+  - pricing page does not show fake prices
+  - contact details are present
+  - legal and policy placeholders are visible if not confirmed
+  - no fake reviews are generated
+  - no fake partnerships are generated
+  - mobile layout works
+  - no production deploy without admin approval

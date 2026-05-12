@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BikeRentalBusinessInput",
+  "type": "object",
+  "required": [
+    "business_name",
+    "business_address",
+    "business_phone",
+    "opening_hours",
+    "rental_items"
+  ],
+  "properties": {
+    "business_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "business_address": {
+      "type": "string",
+      "minLength": 1
+    },
+    "business_phone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "business_email": {
+      "type": "string"
+    },
+    "website_url": {
+      "type": "string"
+    },
+    "opening_hours": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "day",
+          "open",
+          "close"
+        ],
+        "properties": {
+          "day": {
+            "type": "string"
+          },
+          "open": {
+            "type": "string"
+          },
+          "close": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rental_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "category"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "city_bike",
+              "mountain_bike",
+              "road_bike",
+              "ebike",
+              "kids_bike",
+              "cargo_bike",
+              "scooter",
+              "other"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "quantity_total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "price_hourly": {
+            "type": "number",
+            "minimum": 0
+          },
+          "price_half_day": {
+            "type": "number",
+            "minimum": 0
+          },
+          "price_daily": {
+            "type": "number",
+            "minimum": 0
+          },
+          "price_weekly": {
+            "type": "number",
+            "minimum": 0
+          },
+          "deposit_required": {
+            "type": "boolean"
+          },
+          "deposit_amount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "confirmed": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    "add_ons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0
+          },
+          "confirmed": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    "pickup_rules": {
+      "type": "string"
+    },
+    "return_rules": {
+      "type": "string"
+    },
+    "cancellation_policy": {
+      "type": "string"
+    },
+    "deposit_policy": {
+      "type": "string"
+    },
+    "supported_languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "social_links": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

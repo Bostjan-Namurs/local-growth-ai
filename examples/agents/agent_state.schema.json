@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentState",
+  "type": "object",
+  "required": [
+    "run_id",
+    "business_id",
+    "workflow",
+    "stage",
+    "inputs",
+    "outputs",
+    "errors"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "business_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "workflow": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "string"
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "outputs": {
+      "type": "object"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "source_records": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "model_usage": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true
+}

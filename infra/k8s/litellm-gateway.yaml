@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-runtime
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: llm-gateway-secret
+  namespace: ai-runtime
+type: Opaque
+stringData:
+  LITELLM_MASTER_KEY: "replace-me"
+  VLLM_API_KEY: "replace-me"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: litellm-config
+  namespace: ai-runtime
+data:
+  config.yaml: |
+    model_list:
+      - model_name: writer
+        litellm_params:
+          model: openai/local-writer
+          api_base: http://vllm-writer.ai-runtime.svc.cluster.local:8000/v1
+          api_key: os.environ/VLLM_API_KEY
+      - model_name: dev-ollama
+        litellm_params:
+          model: ollama_chat/gemma3
+          api_base: http://ollama.ai-runtime.svc.cluster.local:11434
+    general_settings:
+      master_key: os.environ/LITELLM_MASTER_KEY
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-gateway
+  namespace: ai-runtime
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-gateway
+  template:
+    metadata:
+      labels:
+        app: llm-gateway
+    spec:
+      containers:
+        - name: litellm
+          image: ghcr.io/berriai/litellm:main-latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--config"
+            - "/app/config.yaml"
+            - "--port"
+            - "4000"
+          envFrom:
+            - secretRef:
+                name: llm-gateway-secret
+          ports:
+            - containerPort: 4000
+              name: http
+          volumeMounts:
+            - name: config
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+      volumes:
+        - name: config
+          configMap:
+            name: litellm-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm-gateway
+  namespace: ai-runtime
+spec:
+  type: ClusterIP
+  selector:
+    app: llm-gateway
+  ports:
+    - name: http
+      port: 4000
+      targetPort: 4000

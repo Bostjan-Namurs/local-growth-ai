@@ -1,0 +1,50 @@
+# Business vertical registry
+# Production location can be blueprints/registry.yaml.
+
+verticals:
+  restaurant:
+    name: Restaurant
+    status: active
+    app_pattern: reservation_booking
+    template_id: restaurant-pwa
+    default_package: restaurant_reservation_plus
+    keywords:
+      - restaurant
+      - bistro
+      - cafe
+      - pizzeria
+      - tavern
+
+  salon:
+    name: Salon / Barber
+    status: active
+    app_pattern: appointment_booking
+    template_id: salon-booking-pwa
+    default_package: salon_booking_plus
+    keywords:
+      - salon
+      - hair salon
+      - barber
+      - beauty salon
+      - spa
+
+  bike_rental:
+    name: Bike Rental
+    status: draft
+    app_pattern: rental_booking
+    template_id: rental-booking-pwa
+    default_package: bike_rental_booking_plus
+    reusable_for:
+      - scooter_rental
+      - kayak_rental
+      - ski_rental
+      - equipment_rental
+    keywords:
+      - bike rental
+      - bicycle rental
+      - bicycle hire
+      - e-bike rental
+      - ebike rental
+      - rent a bike
+      - bike hire
+      - cycling rental

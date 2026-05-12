@@ -1,0 +1,9 @@
+# Project-local Codex defaults for LocalGrowth AI.
+# CLI flags override these values.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+allow_login_shell = false
+
+[sandbox_workspace_write]
+network_access = false

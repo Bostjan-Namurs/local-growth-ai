@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BusinessProfileAgentOutput",
+  "type": "object",
+  "required": [
+    "business_summary",
+    "vertical",
+    "digital_gaps",
+    "recommended_package",
+    "missing_data",
+    "claims",
+    "confidence"
+  ],
+  "properties": {
+    "business_summary": {
+      "type": "string"
+    },
+    "vertical": {
+      "type": "string"
+    },
+    "digital_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "likely_customer_segments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_package": {
+      "type": "string"
+    },
+    "missing_data": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "claim",
+          "source",
+          "confidence"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "additionalProperties": false
+}

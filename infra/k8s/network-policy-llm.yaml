@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-llm-gateway-access
+  namespace: ai-runtime
+spec:
+  podSelector:
+    matchLabels:
+      app: llm-gateway
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: localgrowth-prod
+        - namespaceSelector:
+            matchLabels:
+              name: localgrowth-staging
+      ports:
+        - protocol: TCP
+          port: 4000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-vllm-direct-access
+  namespace: ai-runtime
+spec:
+  podSelector:
+    matchLabels:
+      app: vllm-writer
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: llm-gateway
+      ports:
+        - protocol: TCP
+          port: 8000

@@ -1,0 +1,16 @@
+# Example project-scoped Codex configuration.
+# Copy to .codex/config.toml if you want repo-specific settings.
+
+[project]
+name = "localgrowth-ai"
+
+[approval]
+# Keep approvals conservative for production repositories.
+mode = "suggest"
+
+[sandbox]
+# Use a safe sandbox mode according to your local Codex setup.
+network_access = false
+
+[instructions]
+files = ["AGENTS.md", "for-codex/IMPLEMENTATION_BRIEF.md"]

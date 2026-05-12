@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-runtime
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vllm-api-secret
+  namespace: ai-runtime
+type: Opaque
+stringData:
+  VLLM_API_KEY: "replace-me"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-writer
+  namespace: ai-runtime
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm-writer
+  template:
+    metadata:
+      labels:
+        app: vllm-writer
+    spec:
+      nodeSelector:
+        workload: llm
+        accelerator: nvidia
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--model"
+            - "/models/writer-model"
+            - "--host"
+            - "0.0.0.0"
+            - "--port"
+            - "8000"
+            - "--api-key"
+            - "$(VLLM_API_KEY)"
+          env:
+            - name: VLLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: vllm-api-secret
+                  key: VLLM_API_KEY
+          ports:
+            - containerPort: 8000
+              name: http
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+              memory: "48Gi"
+              cpu: "8"
+            requests:
+              memory: "24Gi"
+              cpu: "4"
+          volumeMounts:
+            - name: model-cache
+              mountPath: /models
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: llm-model-cache-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-writer
+  namespace: ai-runtime
+spec:
+  type: ClusterIP
+  selector:
+    app: vllm-writer
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000

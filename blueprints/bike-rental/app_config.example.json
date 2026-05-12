@@ -1,0 +1,54 @@
+{
+  "vertical_id": "bike_rental",
+  "template_id": "rental-booking-pwa",
+  "package_id": "bike_rental_booking_plus",
+  "business": {
+    "name": "PLACEHOLDER: confirm business name",
+    "category": "Bike Rental",
+    "address": "PLACEHOLDER: confirm address",
+    "phone": "PLACEHOLDER: confirm phone",
+    "email": "PLACEHOLDER: confirm email"
+  },
+  "features": {
+    "booking_form": true,
+    "availability_calendar": false,
+    "online_deposit_payment": false,
+    "multilingual": true,
+    "route_recommendations": true,
+    "group_booking": true,
+    "hotel_delivery": false
+  },
+  "pages": [
+    "home",
+    "bikes",
+    "pricing",
+    "booking",
+    "routes",
+    "faq",
+    "contact",
+    "policies"
+  ],
+  "content_rules": {
+    "mark_missing_prices_as_placeholder": true,
+    "do_not_invent_availability": true,
+    "do_not_generate_legal_waiver": true,
+    "do_not_generate_reviews": true,
+    "do_not_claim_partnerships_without_source": true
+  },
+  "rental_items": [
+    {
+      "name": "PLACEHOLDER: City Bike",
+      "category": "city_bike",
+      "description": "Comfortable city bike for short rides and sightseeing.",
+      "price_daily": null,
+      "confirmed": false
+    }
+  ],
+  "missing_data": [
+    "exact rental prices",
+    "deposit policy",
+    "cancellation policy",
+    "rental item photos",
+    "confirmed opening hours"
+  ]
+}

@@ -1,0 +1,71 @@
+vertical_id: bike_rental
+version: 1.0.0
+
+campaigns:
+  - id: summer_tourist_rentals
+    name: Summer Tourist Rentals
+    goal: increase daily rentals during tourist season
+    channels:
+      - landing_page
+      - social_post
+      - email
+      - whatsapp
+    required_inputs:
+      - confirmed bike types
+      - confirmed prices or price placeholders
+      - opening hours
+      - pickup location
+    do_not_invent:
+      - discounts
+      - route safety guarantees
+      - partnerships
+
+  - id: ebike_weekend_campaign
+    name: E-bike Weekend Campaign
+    goal: promote premium e-bike rentals for weekend trips
+    channels:
+      - landing_page
+      - social_post
+      - paid_ad_copy
+    required_inputs:
+      - e-bike availability or placeholder
+      - price or placeholder
+      - booking form link
+
+  - id: group_rental_campaign
+    name: Group Rental Campaign
+    goal: attract families, companies, events, and tourist groups
+    channels:
+      - landing_page
+      - email
+      - social_post
+    required_inputs:
+      - group booking rules
+      - minimum/maximum group size or placeholder
+      - contact details
+
+  - id: hotel_partner_campaign
+    name: Hotel Partner Campaign
+    goal: create a landing page for hotel/tourism referrals
+    channels:
+      - landing_page
+      - printable_qr_flyer
+      - email
+    required_inputs:
+      - confirmed partner name or generic partner placeholder
+    do_not_invent:
+      - hotel names
+      - tourism partnerships
+      - official endorsements
+
+  - id: review_request_campaign
+    name: Review Request Campaign
+    goal: request customer reviews after completed rental
+    channels:
+      - email
+      - sms
+      - whatsapp
+    required_inputs:
+      - customer consent status
+      - review link
+    approval_required: true

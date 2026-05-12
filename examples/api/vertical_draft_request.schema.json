@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VerticalDraftRequest",
+  "type": "object",
+  "required": [
+    "vertical_id",
+    "name",
+    "app_pattern",
+    "default_template",
+    "business_problem",
+    "pages",
+    "features",
+    "data_requirements",
+    "ai_generation_rules",
+    "qa_checks"
+  ],
+  "properties": {
+    "vertical_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "app_pattern": {
+      "type": "string",
+      "enum": [
+        "reservation_booking",
+        "appointment_booking",
+        "rental_booking",
+        "direct_booking",
+        "service_quote",
+        "membership",
+        "catalog_contact"
+      ]
+    },
+    "default_template": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "admin_review",
+        "codex_ready",
+        "implementation_in_progress",
+        "pr_open",
+        "testing",
+        "approved",
+        "active",
+        "deprecated"
+      ]
+    },
+    "business_problem": {
+      "type": "object"
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "features": {
+      "type": "object"
+    },
+    "data_requirements": {
+      "type": "object"
+    },
+    "ai_generation_rules": {
+      "type": "object"
+    },
+    "campaigns": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "qa_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "codex_mode": {
+      "type": "string",
+      "enum": [
+        "blueprint_only",
+        "template_adaptation",
+        "new_template_or_module"
+      ]
+    },
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

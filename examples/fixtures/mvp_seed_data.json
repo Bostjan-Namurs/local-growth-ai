@@ -1,0 +1,44 @@
+{
+  "businesses": [
+    {
+      "id": "seed-bike-rental-001",
+      "name": "Example Bike Rental",
+      "category": "bike_rental",
+      "city": "Ljubljana",
+      "website_url": null,
+      "source_type": "manual_seed",
+      "compliance_status": "allowed_for_testing"
+    },
+    {
+      "id": "seed-restaurant-001",
+      "name": "Example Bistro",
+      "category": "restaurant",
+      "city": "Ljubljana",
+      "website_url": null,
+      "source_type": "manual_seed",
+      "compliance_status": "allowed_for_testing"
+    }
+  ],
+  "vertical_drafts": [
+    {
+      "vertical_id": "bike_rental",
+      "app_pattern": "rental_booking",
+      "template_id": "rental-booking-pwa",
+      "status": "draft",
+      "approval_required": true
+    }
+  ],
+  "agent_examples": {
+    "fake_business_profile": {
+      "vertical_id": "bike_rental",
+      "recommended_package": "bike_rental_booking_plus",
+      "missing_data": [
+        "opening_hours",
+        "rental_items",
+        "pricing_rules",
+        "pickup_rules",
+        "return_rules"
+      ]
+    }
+  }
+}
