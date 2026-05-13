@@ -12,6 +12,7 @@ Status: in progress
 - Worker health reports queue mode, queue name, Redis configuration presence, and fake LLM mode.
 - Local queue adapter accepts only validated fake-mode jobs and stores deterministic in-memory queue entries for tests.
 - Redis queue adapter is available behind explicit config, but default verification does not connect to Redis.
+- `make test-worker-redis` is available as an opt-in live Redis smoke test after `make dev-up`.
 - Worker job payloads now have runtime schemas before enqueue.
 - Prohibited job names, non-fake LLM mode, and approval-gated app spec generation remain blocked.
 - Deterministic worker processor stubs produce placeholder-only outputs with input hashes, output hashes, model aliases, approval status, and audit event payloads.
@@ -23,6 +24,15 @@ pnpm --dir apps/worker test
 pnpm --dir apps/worker typecheck
 ./verify_macos.sh
 ```
+
+Optional live Redis smoke, not included in default verification:
+
+```bash
+make dev-up
+make test-worker-redis
+```
+
+Current environment note: not run, because the `docker` CLI is unavailable in this shell.
 
 Last result: passed.
 
@@ -47,6 +57,6 @@ Worker: 10 tests passed
 
 ## Next Backend Work
 
-- Add opt-in Redis smoke tests only after local Redis is intentionally started with `make dev-up`.
+- Run `make test-worker-redis` when local Docker Redis is intentionally started with `make dev-up`.
 - Persist worker audit events through the database-backed agent run logger before any real asynchronous workflow is enabled.
 - Keep API enqueue endpoints private/internal until authentication and approval boundaries are implemented.
