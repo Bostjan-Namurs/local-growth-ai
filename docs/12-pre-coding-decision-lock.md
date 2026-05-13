@@ -27,13 +27,13 @@ Use this stack unless an existing repository already has a committed alternative
 | Layer | Locked decision |
 |---|---|
 | Repository style | Simple monorepo, no Nx/Turborepo initially |
-| Backend API | FastAPI |
-| Backend language | Python 3.12 |
-| Python package manager | `uv` |
-| Backend validation | Pydantic v2 |
-| Database access | SQLAlchemy 2.x |
-| Database migrations | Alembic, with existing SQL examples preserved as references |
-| Worker | Celery |
+| Backend API | Fastify |
+| Backend language | TypeScript |
+| Package manager | `pnpm` |
+| Backend validation | Zod |
+| Database access | Drizzle ORM |
+| Database migrations | Drizzle Kit, with existing SQL examples preserved as references |
+| Worker | BullMQ |
 | Queue broker | Redis |
 | Frontend admin | Next.js App Router + TypeScript |
 | Frontend package manager | `pnpm` |
@@ -109,31 +109,33 @@ localgrowth-ai/
 
   apps/
     api/
-      pyproject.toml
-      alembic.ini
-      alembic/
-      app/
-        main.py
-        config.py
-        db.py
+      package.json
+      tsconfig.json
+      src/
+        app.ts
+        server.ts
+        config.ts
+        db/
         models/
-        schemas/
         routes/
         services/
       tests/
 
     worker/
-      pyproject.toml
-      worker.py
-      tasks/
+      package.json
+      tsconfig.json
+      src/
+        worker.ts
+        tasks/
       tests/
 
-    admin-ui/
+    web/
       package.json
-      app/
-      components/
-      lib/
-      tests/
+      src/
+        app/
+        components/
+        lib/
+        tests/
 
   packages/
     agents/
@@ -149,13 +151,13 @@ localgrowth-ai/
       restaurant/
       salon/
       bike-rental/
-      loader.py
+      loader.ts
       schemas/
       tests/
 
     app-generator/
       templates/
-      generator.py
+      generator.ts
       schemas/
       tests/
 
@@ -197,6 +199,7 @@ The implementation should expose these root commands as soon as possible:
 
 ```bash
 make install
+make dev
 make dev-up
 make dev-down
 make api-dev
@@ -208,6 +211,7 @@ make test
 make test-api
 make test-agents
 make test-blueprints
+make test-web
 make test-worker
 ```
 

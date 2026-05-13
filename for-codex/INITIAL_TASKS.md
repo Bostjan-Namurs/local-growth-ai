@@ -8,15 +8,11 @@ Create the monorepo structure:
 
 ```text
 apps/api
-apps/admin-ui
+apps/web
 apps/worker
-packages/agents
-packages/llm
-packages/blueprints
-packages/app-generator
-packages/shared
+blueprints
 infra/k8s
-migrations
+migrations/drizzle
 ```
 
 Add README, environment example, and basic test setup.
@@ -41,7 +37,8 @@ Acceptance:
 
 Create API service with:
 
-- `/api/v1/health`,
+- `/health`,
+- `/version`,
 - environment config loader,
 - database connection,
 - structured logging.

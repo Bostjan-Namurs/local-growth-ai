@@ -119,6 +119,8 @@ DATABASE_URL=postgresql://...
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY` to frontend/customer apps.
 
+Codex and MCP tools must not inspect or mutate production Supabase by default. Use local Supabase, a disposable branch, or a clearly approved development project for schema inspection and migration checks. The API `/health` response includes `supabase_local` so local runs can distinguish local/dev configuration from external Supabase targets before any connection code is added.
+
 ## pgvector setup
 
 Enable the extension:

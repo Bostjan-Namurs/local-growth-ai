@@ -21,7 +21,7 @@
                                         v
 +------------------+        +-----------+------------+        +-----------------------+
 | Lead Sources     | -----> | Backend API            | -----> | Supabase/Postgres     |
-| manual/licensed  |        | FastAPI/NestJS         |        | pgvector + auth/store |
+| manual/licensed  |        | Fastify/TypeScript     |        | pgvector + auth/store |
 +------------------+        +-----------+------------+        +-----------+-----------+
                                         |                                 |
                                         v                                 v
@@ -217,14 +217,13 @@ Use a deterministic graph/state machine first. Add a framework such as LangGraph
 
 Each agent should be implemented as:
 
-```python
-class AgentProtocol(Protocol):
-    name: str
-    input_model: type[BaseModel]
-    output_model: type[BaseModel]
-
-    async def run(self, state: AgentState) -> AgentResult:
-        ...
+```ts
+interface AgentProtocol<Input, Output> {
+  readonly name: string;
+  readonly inputSchema: z.ZodType<Input>;
+  readonly outputSchema: z.ZodType<Output>;
+  run(input: Input): AgentResult<Output>;
+}
 ```
 
 Every agent run must store:

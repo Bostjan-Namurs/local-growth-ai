@@ -30,8 +30,8 @@ This project is a self-hosted AI platform for discovering local businesses, gene
 ## Suggested first stack
 
 ```text
-backend: FastAPI + Pydantic + SQLAlchemy/SQLModel
-worker: Celery or Dramatiq + Redis
+backend: Node.js + TypeScript + Fastify + Zod
+worker: BullMQ + Redis
 frontend: Next.js admin dashboard
 storage: Supabase Postgres + pgvector + object storage
 llm gateway: LiteLLM or custom OpenAI-compatible router
@@ -132,11 +132,10 @@ Sprint 1 is limited to repository scaffold, local dev setup, health endpoint, co
 Use these defaults unless the repository already contains an explicit alternative:
 
 ```text
-backend: FastAPI + Python 3.12 + Pydantic v2 + SQLAlchemy 2.x + Alembic
-python package manager: uv
-worker: Celery + Redis
+backend: Node.js + TypeScript + Fastify + Zod + Drizzle
+package manager: pnpm
+worker: BullMQ + Redis
 frontend admin: Next.js App Router + TypeScript
-frontend package manager: pnpm
 database: self-hosted Supabase Postgres + pgvector
 LLM mode for local development: LLM_MODE=fake
 LLM integration: internal OpenAI-compatible gateway with model aliases
@@ -153,6 +152,7 @@ make test
 make test-api
 make test-agents
 make test-blueprints
+make test-web
 make test-worker
 ```
 

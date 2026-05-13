@@ -20,8 +20,8 @@ fi
 cat <<'MSG'
 This script can install/update common development prerequisites through Homebrew:
   git
-  python@3.12
   node
+  libpq
 
 It will not install Docker Desktop automatically.
 It will not install Codex CLI; use scripts/macos/04_install_codex_cli.sh for that.
@@ -35,7 +35,7 @@ case "$answer" in
 esac
 
 brew update
-brew install git python@3.12 node
+brew install git node libpq
 
 if command -v corepack >/dev/null 2>&1; then
   corepack enable || true
@@ -45,6 +45,9 @@ fi
 cat <<'MSG'
 
 Homebrew prerequisites installed.
+If psql is still not on PATH, add libpq to your shell profile:
+  export PATH="$(brew --prefix libpq)/bin:$PATH"
+
 Docker Desktop is optional for the first tests. Install it separately if needed.
 Next:
   ./scripts/macos/00_check_prereqs.sh

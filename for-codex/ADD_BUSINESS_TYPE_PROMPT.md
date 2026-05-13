@@ -18,12 +18,12 @@ Vertical request:
 <PASTE vertical implementation request JSON here>
 
 Required work:
-1. Add or update examples/blueprints/registry.yaml.
-2. Add examples/blueprints/<vertical-id>/blueprint.yaml.
-3. Add examples/blueprints/<vertical-id>/input.schema.json.
-4. Add examples/blueprints/<vertical-id>/app_config.example.json.
-5. Add examples/blueprints/<vertical-id>/campaign_playbook.yaml.
-6. Add examples/blueprints/<vertical-id>/qa_checklist.md.
+1. Add or update blueprints/registry.yaml.
+2. Add blueprints/<vertical-id>/blueprint.yaml.
+3. Add blueprints/<vertical-id>/input.schema.json.
+4. Add blueprints/<vertical-id>/app_config.example.json.
+5. Add blueprints/<vertical-id>/campaign_playbook.yaml.
+6. Add blueprints/<vertical-id>/qa_checklist.md.
 7. Add classifier synonyms for the new vertical.
 8. Add blueprint matcher mapping.
 9. Add tests for:
@@ -37,10 +37,10 @@ Required work:
 11. Update docs if the workflow or template behavior changes.
 
 Verification commands:
-- npm run lint
-- npm run test
-- npm run test:blueprints
-- npm run test:agents
+- make lint
+- make test
+- make test-blueprints
+- make test-agents
 
 Acceptance criteria:
 - The vertical loads from the registry.

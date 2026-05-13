@@ -1,3 +1,5 @@
-export default function LeadsPage() {
-  return <main><h1>Leads</h1></main>;
+import { redirect } from "next/navigation";
+
+export default function AdminLeadsPage() {
+  redirect("/leads");
 }

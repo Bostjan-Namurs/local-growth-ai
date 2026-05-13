@@ -5,21 +5,21 @@ Use these decisions unless the existing repository already has a committed alter
 ## Backend
 
 ```text
-Language: Python 3.12
-Framework: FastAPI
-Validation: Pydantic v2
-Database: SQLAlchemy 2.x
-Migrations: Alembic
-Testing: pytest
-Linting: ruff
-Typing: mypy
-Package manager: uv
+Language: TypeScript
+Framework: Fastify
+Validation: Zod
+Database: Drizzle ORM
+Migrations: Drizzle Kit
+Testing: Vitest
+Linting: TypeScript compiler checks initially
+Typing: TypeScript strict mode
+Package manager: pnpm
 ```
 
 ## Worker
 
 ```text
-Worker: Celery
+Worker: BullMQ
 Broker: Redis
 Backend: Redis initially, database records for durable agent state
 ```

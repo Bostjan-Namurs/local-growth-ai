@@ -81,18 +81,16 @@ The goal is to avoid one custom app for every business type.
 
 ## Vertical module structure
 
-Recommended structure:
+Current repository structure:
 
 ```text
-examples/blueprints/<vertical-id>/
+blueprints/<vertical-id>/
   blueprint.yaml
   input.schema.json
   app_config.example.json
   campaign_playbook.yaml
   qa_checklist.md
 ```
-
-The production repository can place these under `blueprints/<vertical-id>/` instead of `examples/blueprints/<vertical-id>/`.
 
 ## Blueprint fields
 

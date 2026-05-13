@@ -33,30 +33,10 @@ else
   fail "git is missing. Install with: brew install git"
 fi
 
-PYTHON_BIN=""
-for candidate in python3.12 python3; do
-  if command -v "$candidate" >/dev/null 2>&1; then
-    if "$candidate" - <<'PYCHECK' >/dev/null 2>&1
-import sys
-raise SystemExit(0 if sys.version_info >= (3, 12) else 1)
-PYCHECK
-    then
-      PYTHON_BIN="$candidate"
-      break
-    fi
-  fi
-done
-
-if [[ -n "$PYTHON_BIN" ]]; then
-  ok "python: $($PYTHON_BIN --version) at $(command -v "$PYTHON_BIN")"
-else
-  fail "Python 3.12+ is missing. Install with: brew install python@3.12"
-fi
-
 if command -v node >/dev/null 2>&1; then
   ok "node: $(node --version)"
 else
-  warn "node is missing. Install with: brew install node"
+  fail "node is missing. Install with: brew install node"
 fi
 
 if command -v npm >/dev/null 2>&1; then
@@ -68,7 +48,13 @@ fi
 if command -v pnpm >/dev/null 2>&1; then
   ok "pnpm: $(pnpm --version)"
 else
-  warn "pnpm is missing. Future frontend tasks may need it. You can enable it with: corepack enable && corepack prepare pnpm@latest --activate"
+  fail "pnpm is missing. Enable it with: corepack enable && corepack prepare pnpm@latest --activate"
+fi
+
+if command -v psql >/dev/null 2>&1; then
+  ok "psql: $(psql --version)"
+else
+  warn "psql is missing. It is required for Supabase DB checks and migrations. Install with: brew install libpq"
 fi
 
 if command -v docker >/dev/null 2>&1; then

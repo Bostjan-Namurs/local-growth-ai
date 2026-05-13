@@ -4,8 +4,8 @@
 
 Decisions to confirm before coding:
 
-- backend framework: FastAPI or NestJS,
-- worker framework: Celery/Dramatiq/Temporal/BullMQ,
+- backend framework: Fastify,
+- worker framework: BullMQ initially, Temporal later only if needed,
 - frontend: Next.js,
 - deployment style: Helm/Kustomize/Fleet,
 - local LLM gateway: LiteLLM or custom,

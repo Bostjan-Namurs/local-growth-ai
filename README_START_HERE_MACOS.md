@@ -72,11 +72,10 @@ It will:
 
 - check macOS prerequisites;
 - create `.env` from `.env.example` only if `.env` does not exist;
-- clean generated Python/test cache folders;
+- clean generated Node/test cache folders;
 - start local Docker services only if Docker is installed and running;
-- create `.venv` only if missing;
-- install API development dependencies;
-- run backend tests;
+- install workspace dependencies with pnpm;
+- run API, web, and worker tests;
 - initialize Git only if this folder is not already a Git repo;
 - create an initial commit only if Git user name/email are already configured.
 
@@ -121,8 +120,8 @@ Minimum tools for the first implementation session:
 
 ```text
 Git
-Python 3.12+
 Node.js/npm
+pnpm
 Codex CLI
 ```
 

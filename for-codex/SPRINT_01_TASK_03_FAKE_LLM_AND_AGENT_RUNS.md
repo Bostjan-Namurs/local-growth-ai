@@ -12,7 +12,7 @@ Implement Sprint 1 Task 3: fake LLM client and agent run logging skeleton.
 Requirements:
 1. Create an LLM client interface that supports model aliases: classifier, extractor, writer, coder, judge, embedding.
 2. Implement fake mode responses for tests.
-3. Add no real network call unless LLM_MODE is local or cluster.
+3. Add no real network call unless `LLM_MODE=gateway` and the task explicitly approves gateway work.
 4. Add typed request/response models for LLM calls.
 5. Add agent run logging service skeleton that can store in memory for tests and is ready for database storage later.
 6. Add tests for fake classifier, fake proposal writer, and fake judge.

@@ -1,3 +1,5 @@
-export default function ApprovalsPage() {
-  return <main><h1>Approvals</h1></main>;
+import { redirect } from "next/navigation";
+
+export default function AdminApprovalsPage() {
+  redirect("/approvals");
 }

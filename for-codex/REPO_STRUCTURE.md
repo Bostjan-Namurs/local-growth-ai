@@ -1,4 +1,6 @@
-# Recommended Repository Structure
+# Current Repository Structure
+
+This file reflects the current Sprint 1 TypeScript scaffold.
 
 ```text
 localgrowth-ai/
@@ -6,101 +8,61 @@ localgrowth-ai/
   AGENTS.md
   .env.example
   docker-compose.dev.yml
+  Makefile
 
   apps/
     api/
       src/
-        main.py
-        config.py
-        db.py
-        api/v1/
+        agents/
+        db/
+        llm/
         services/
-        models/
-        schemas/
+        app.ts
+        config.ts
+        server.ts
       tests/
+      scripts/
+      package.json
+
+    web/
+      src/
+        app/
+        components/
+        features/
+        lib/
+      tests/
+      package.json
 
     worker/
       src/
-        main.py
-        jobs/
-        workflows/
+        jobs.ts
+        worker.ts
       tests/
-
-    admin-ui/
-      app/
-      components/
-      lib/
       package.json
 
-  packages/
-    agents/
-      localgrowth_agents/
-        base.py
-        context.py
-        registry.py
-        source_compliance.py
-        website_audit.py
-        business_profile.py
-        blueprint_matcher.py
-        proposal.py
-        app_spec.py
-        content.py
-        qa.py
-        campaign.py
-      tests/
-
-    llm/
-      localgrowth_llm/
-        client.py
-        fake_client.py
-        gateway_client.py
-        models.py
-        usage_logger.py
-      tests/
-
-    blueprints/
-      restaurant_reservation_plus.md
-      salon_booking_plus.md
-      loader.py
-      schemas/
-
-    app-generator/
-      templates/
-        restaurant-pwa-v1/
-        salon-booking-v1/
-      generator.py
-      schemas/
-
-    shared/
-      localgrowth_shared/
-        types.py
-        audit.py
-        approvals.py
-        errors.py
+  blueprints/
+    registry.yaml
+    bike-rental/
 
   migrations/
-    versions/
+    drizzle/
 
-  infra/
-    k8s/
-      api.yaml
-      worker.yaml
-      admin-ui.yaml
-      llm-gateway.yaml
-      vllm.yaml
-    helm/
+  scripts/
+    db/
+    macos/
 
   docs/
+  for-codex/
 ```
 
-## Dependency direction
+## Dependency Direction
 
 ```text
-apps/api       -> packages/shared, packages/agents, packages/llm
-apps/worker    -> packages/shared, packages/agents, packages/llm, packages/app-generator
-apps/admin-ui  -> API only
-packages/agents -> packages/llm, packages/shared, packages/blueprints
-packages/app-generator -> packages/blueprints, packages/shared
+apps/web       -> API contracts and read-only facade data
+apps/api       -> local agents, LLM adapter, Drizzle schema, blueprint loader
+apps/worker    -> local fake-mode job contract only during Sprint 1
+blueprints     -> loaded by apps/api services
+migrations     -> applied by scripts/db/apply_migrations.sh
 ```
 
-Frontend must not import backend internals directly.
+Frontend must not import backend internals directly. Production queue, LLM gateway, Rancher deployment, and outreach integrations remain outside Sprint 1.

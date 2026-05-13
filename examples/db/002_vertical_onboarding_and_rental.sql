@@ -1,4 +1,5 @@
 -- 002_vertical_onboarding_and_rental.sql
+-- Historical/future reference only. Do not apply as an active Sprint 1 migration.
 -- Adds vertical onboarding workflow and reusable rental module.
 -- Adjust table names/types to match the production schema conventions.
 

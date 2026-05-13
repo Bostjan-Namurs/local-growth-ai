@@ -46,7 +46,7 @@ Start with small tasks:
 ```text
 Task 1: repo scaffold and local development bootstrap
 Task 2: config loader and health endpoint
-Task 3: database/Alembic foundation
+Task 3: database/Drizzle foundation
 Task 4: blueprint registry loader
 Task 5: fake LLM client
 Task 6: agent run logger
@@ -69,10 +69,10 @@ repo structure
 .env.example
 docker-compose.dev.yml
 Makefile
-apps/api minimal FastAPI app
+apps/api minimal Fastify app
 apps/worker placeholder
-apps/admin-ui placeholder
-packages/blueprints copied examples
+apps/web admin scaffold
+blueprints copied examples
 basic tests
 CI skeleton
 ```
@@ -117,7 +117,8 @@ Sprint 1 is complete when:
 
 ```text
 make test passes
-make lint passes or documented initial exceptions exist
+make lint passes
+make typecheck passes
 API health endpoint works
 local database can start
 blueprint loader tests pass
@@ -126,4 +127,4 @@ SourceComplianceAgent rejects unsafe lead source modes
 agent run records can be created and completed
 ```
 
-Do not continue into proposal generation or app generation until this foundation is working.
+Do not continue beyond scaffolded fake-mode proposal/app-spec slices until this foundation is working.

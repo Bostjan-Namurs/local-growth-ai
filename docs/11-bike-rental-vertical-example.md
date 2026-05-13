@@ -282,11 +282,11 @@ Do not create `bike-rental-pwa` first unless bike rental requires many unique mo
 ## Files included in this bundle
 
 ```text
-examples/blueprints/bike-rental/blueprint.yaml
-examples/blueprints/bike-rental/input.schema.json
-examples/blueprints/bike-rental/app_config.example.json
-examples/blueprints/bike-rental/campaign_playbook.yaml
-examples/blueprints/bike-rental/qa_checklist.md
+blueprints/bike-rental/blueprint.yaml
+blueprints/bike-rental/input.schema.json
+blueprints/bike-rental/app_config.example.json
+blueprints/bike-rental/campaign_playbook.yaml
+blueprints/bike-rental/qa_checklist.md
 examples/db/002_vertical_onboarding_and_rental.sql
 for-codex/ADD_BUSINESS_TYPE_PROMPT.md
 for-codex/CODEX_HANDOFF_WORKFLOW.md

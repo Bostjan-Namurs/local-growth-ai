@@ -1,4 +1,5 @@
 -- LocalGrowth AI initial schema
+-- Historical reference only. The active schema is defined by migrations/drizzle/*.sql.
 -- Adjust UUID extension depending on your Supabase/Postgres environment.
 
 create extension if not exists pgcrypto;

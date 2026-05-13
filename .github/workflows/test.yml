@@ -46,21 +46,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
 
-      - name: Install uv
-        run: pip install uv
-
       - name: Install pnpm
-        run: corepack enable
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.0 --activate
 
       - name: Install dependencies
         run: make install
@@ -70,6 +64,12 @@ jobs:
 
       - name: Typecheck
         run: make typecheck
+
+      - name: Apply local database migrations
+        run: make db-apply-migrations
+
+      - name: Smoke local Postgres persistence
+        run: make db-smoke-postgres
 
       - name: Test
         run: make test

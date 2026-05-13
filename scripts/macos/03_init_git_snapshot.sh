@@ -17,7 +17,7 @@ else
   printf "✅ Git repository already exists\n"
 fi
 
-find . -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' -o -name '.ruff_cache' \) -prune -exec rm -rf {} + 2>/dev/null || true
+find . -type d \( -name '.vitest' -o -name '.next' -o -name 'dist' \) -prune -exec rm -rf {} + 2>/dev/null || true
 
 git add .
 

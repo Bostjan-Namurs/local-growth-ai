@@ -10,9 +10,9 @@ Verification:
 make help
 ```
 
-## Task 1.2 — FastAPI skeleton
+## Task 1.2 — Fastify skeleton
 
-Create `apps/api` with FastAPI, config loading, and `GET /health`.
+Create `apps/api` with Fastify, config loading, and `GET /health`.
 
 Verification:
 
@@ -20,9 +20,9 @@ Verification:
 make test-api
 ```
 
-## Task 1.3 — Database and Alembic foundation
+## Task 1.3 — Database and Drizzle foundation
 
-Create SQLAlchemy base, database session, and initial migration folder.
+Create Drizzle schema definitions, database config helpers, and initial migration folder.
 
 Verification:
 
@@ -61,7 +61,7 @@ make test-agents
 
 ## Task 1.6 — Blueprint loader
 
-Implement loader for `packages/blueprints/registry.yaml` and vertical folders.
+Implement loader for `blueprints/registry.yaml` and vertical folders.
 
 Verification:
 
@@ -100,4 +100,5 @@ make test
 make test-api
 make test-agents
 make test-blueprints
+make test-web
 ```

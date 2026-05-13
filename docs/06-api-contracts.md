@@ -2,7 +2,8 @@
 
 ## API principles
 
-- All endpoints under `/api/v1`.
+- Sprint 1 scaffold endpoints are mounted at the root, for example `/health`.
+- Future product API endpoints may move under `/api/v1` when versioning is introduced.
 - Auth required except health checks.
 - Use UUID identifiers.
 - Use typed status fields.
@@ -12,7 +13,7 @@
 ## Health
 
 ```http
-GET /api/v1/health
+GET /health
 ```
 
 Response:

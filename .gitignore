@@ -16,6 +16,7 @@ node_modules/
 .next/
 out/
 dist/
+*.tsbuildinfo
 
 # Logs
 *.log
@@ -28,3 +29,4 @@ dist/
 
 # Local generated artifacts
 *.tmp
+design/reference/figma-make-export/

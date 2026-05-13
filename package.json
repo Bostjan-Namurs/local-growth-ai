@@ -1,0 +1,23 @@
+{
+  "name": "localgrowth-ai",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev:api": "pnpm --dir apps/api dev",
+    "dev:web": "pnpm --dir apps/web dev",
+    "dev:worker": "pnpm --dir apps/worker dev",
+    "lint": "pnpm --dir apps/api lint && pnpm --dir apps/web lint && pnpm --dir apps/worker lint",
+    "lint:backend": "pnpm --dir apps/api lint && pnpm --dir apps/worker lint",
+    "typecheck": "pnpm --dir apps/api typecheck && pnpm --dir apps/web typecheck && pnpm --dir apps/worker typecheck",
+    "typecheck:backend": "pnpm --dir apps/api typecheck && pnpm --dir apps/worker typecheck",
+    "test": "pnpm --dir apps/api test && pnpm --dir apps/web test && pnpm --dir apps/worker test",
+    "test:api": "pnpm --dir apps/api test",
+    "test:agents": "pnpm --dir apps/api test:agents",
+    "test:backend": "pnpm --dir apps/api test && pnpm --dir apps/worker test",
+    "test:blueprints": "pnpm --dir apps/api test:blueprints",
+    "test:web": "pnpm --dir apps/web test",
+    "test:worker": "pnpm --dir apps/worker test",
+    "build:backend": "pnpm --dir apps/api build && pnpm --dir apps/worker build"
+  }
+}

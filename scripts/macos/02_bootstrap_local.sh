@@ -19,8 +19,8 @@ else
 fi
 
 printf "\nStep 2: clean generated caches\n"
-find . -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' -o -name '.ruff_cache' \) -prune -exec rm -rf {} + 2>/dev/null || true
-printf "✅ Removed generated Python/test caches if present\n"
+find . -type d \( -name '.vitest' -o -name '.next' -o -name 'dist' \) -prune -exec rm -rf {} + 2>/dev/null || true
+printf "✅ Removed generated Node/test caches if present\n"
 
 printf "\nStep 3: optional local Docker services\n"
 if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
@@ -34,43 +34,29 @@ else
   printf "⚠️  Docker/compose unavailable. Skipping local services.\n"
 fi
 
-printf "\nStep 4: Python virtual environment\n"
-PYTHON_BIN=""
-for candidate in python3.12 python3; do
-  if command -v "$candidate" >/dev/null 2>&1; then
-    if "$candidate" - <<'PYCHECK' >/dev/null 2>&1
-import sys
-raise SystemExit(0 if sys.version_info >= (3, 12) else 1)
-PYCHECK
-    then
-      PYTHON_BIN="$candidate"
-      break
-    fi
-  fi
-done
-
-if [[ -z "$PYTHON_BIN" ]]; then
-  echo "ERROR: Python 3.12+ is required. Install with: brew install python@3.12" >&2
+printf "\nStep 4: Node package manager\n"
+if ! command -v node >/dev/null 2>&1; then
+  echo "ERROR: Node.js is required. Install with: brew install node" >&2
   exit 1
 fi
-printf "Using Python: %s\n" "$($PYTHON_BIN --version)"
+printf "Using Node: %s\n" "$(node --version)"
 
-if [[ ! -d .venv ]]; then
-  "$PYTHON_BIN" -m venv .venv
-  printf "✅ Created .venv\n"
-else
-  printf "✅ .venv already exists\n"
+if ! command -v pnpm >/dev/null 2>&1; then
+  if command -v corepack >/dev/null 2>&1; then
+    corepack enable
+    corepack prepare pnpm@latest --activate
+  else
+    echo "ERROR: pnpm is required. Install with: npm install -g pnpm" >&2
+    exit 1
+  fi
 fi
+printf "Using pnpm: %s\n" "$(pnpm --version)"
 
-# shellcheck source=/dev/null
-source .venv/bin/activate
-python -m pip install --upgrade pip wheel
+printf "\nStep 5: install workspace dependencies\n"
+pnpm install
 
-printf "\nStep 5: install API development dependencies\n"
-(cd apps/api && python -m pip install -e '.[dev]')
-
-printf "\nStep 6: run backend tests\n"
-(cd apps/api && python -m pytest tests)
+printf "\nStep 6: run tests\n"
+make test
 
 cat <<'MSG'
 

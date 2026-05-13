@@ -140,11 +140,12 @@ The documentation is now ready for coding to begin. Do not expand post-MVP docum
 
 This version adds the final pre-coding implementation lock. Before coding starts, read:
 
-1. `docs/12-implementation-lock-before-coding.md`
-2. `docs/13-codex-sprint-1-kickoff.md`
-3. `for-codex/STACK_DECISIONS.md`
-4. `for-codex/SPRINT_1_TASKS.md`
-5. `for-codex/KICKOFF_PROMPT.md`
+1. `docs/12-pre-coding-decision-lock.md`
+2. `docs/13-local-dev-bootstrap.md`
+3. `docs/14-codex-first-sprint-operating-model.md`
+4. `for-codex/STACK_DECISIONS.md`
+5. `for-codex/SPRINT_1_TASKS.md`
+6. `for-codex/KICKOFF_PROMPT.md`
 
 New example files:
 

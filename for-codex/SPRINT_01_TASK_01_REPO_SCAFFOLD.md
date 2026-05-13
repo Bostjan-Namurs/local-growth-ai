@@ -19,7 +19,7 @@ Requirements:
 3. Add docker-compose.dev.yml for Postgres with pgvector and Redis.
 4. Add a root Makefile with dev-up, dev-down, lint, test, test-api,
    test-blueprints, test-agents, format, api-dev, web-dev, and worker-dev targets.
-5. Add apps/api with a minimal FastAPI app exposing GET /health and GET /version.
+5. Add apps/api with a minimal Fastify app exposing GET /health and GET /version.
 6. Add backend config loading from environment variables.
 7. Add basic tests for /health and config loading.
 8. Add apps/web placeholder package.json and initial admin route placeholders.

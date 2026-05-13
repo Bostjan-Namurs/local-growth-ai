@@ -382,14 +382,14 @@ Best after the process is stable.
   "app_pattern": "rental_booking",
   "template_id": "rental-booking-pwa",
   "expected_files": [
-    "examples/blueprints/bike-rental/blueprint.yaml",
-    "examples/blueprints/bike-rental/input.schema.json",
-    "examples/blueprints/bike-rental/app_config.example.json",
-    "examples/blueprints/bike-rental/campaign_playbook.yaml",
-    "examples/blueprints/bike-rental/qa_checklist.md"
+    "blueprints/bike-rental/blueprint.yaml",
+    "blueprints/bike-rental/input.schema.json",
+    "blueprints/bike-rental/app_config.example.json",
+    "blueprints/bike-rental/campaign_playbook.yaml",
+    "blueprints/bike-rental/qa_checklist.md"
   ],
   "must_update": [
-    "examples/blueprints/registry.yaml",
+    "blueprints/registry.yaml",
     "agent classifier mappings",
     "blueprint matcher tests"
   ],
@@ -403,10 +403,10 @@ Best after the process is stable.
     "safety guarantees"
   ],
   "verification_commands": [
-    "npm run lint",
-    "npm run test",
-    "npm run test:blueprints",
-    "npm run test:agents"
+    "make lint",
+    "make test",
+    "make test-blueprints",
+    "make test-agents"
   ],
   "acceptance_criteria": [
     "vertical loads from registry",

@@ -1,23 +1,34 @@
-.PHONY: help install dev-up dev-down api-dev admin-dev worker-dev lint typecheck test test-api test-agents test-blueprints test-worker format
+.PHONY: help install dev dev-up dev-down db-apply-migrations db-check-supabase db-smoke-postgres db-sync-blueprints api-dev admin-dev worker-dev lint lint-backend typecheck typecheck-backend test test-api test-agents test-backend test-blueprints test-web test-worker format
 
 help:
 	@echo "LocalGrowth AI commands"
 	@echo "  make install          Install dependencies"
+	@echo "  make dev              Start local Postgres/pgvector and Redis"
 	@echo "  make dev-up           Start local Postgres/pgvector and Redis"
 	@echo "  make dev-down         Stop local services"
-	@echo "  make api-dev          Run FastAPI app"
+	@echo "  make api-dev          Run Fastify API"
 	@echo "  make admin-dev        Run Next.js admin UI"
-	@echo "  make worker-dev       Run Celery worker"
+	@echo "  make worker-dev       Run TypeScript worker"
+	@echo "  make db-check-supabase Prompt and check approved Supabase DB connectivity"
+	@echo "  make db-apply-migrations Prompt or use DATABASE_URL to apply DB migrations"
+	@echo "  make db-sync-blueprints Prompt or use DATABASE_URL to sync blueprint catalog rows"
+	@echo "  make db-smoke-postgres Prompt or use DATABASE_URL to run Postgres persistence smoke"
 	@echo "  make lint             Run lint checks"
+	@echo "  make lint-backend     Run backend lint checks"
 	@echo "  make typecheck        Run type checks"
+	@echo "  make typecheck-backend Run backend type checks"
 	@echo "  make test             Run all tests"
 	@echo "  make test-api         Run API tests"
+	@echo "  make test-backend     Run API and worker tests"
 	@echo "  make test-agents      Run agent tests"
 	@echo "  make test-blueprints  Run blueprint tests"
+	@echo "  make test-web         Run admin web tests"
 	@echo "  make test-worker      Run worker tests"
 
 install:
-	@echo "Install commands will be implemented after app skeleton is created."
+	pnpm install
+
+dev: dev-up
 
 dev-up:
 	docker compose -f docker-compose.dev.yml up -d
@@ -25,34 +36,66 @@ dev-up:
 dev-down:
 	docker compose -f docker-compose.dev.yml down
 
-api-dev:
-	cd apps/api && uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+db-check-supabase:
+	./scripts/db/check_supabase_connection.sh
 
-admin-dev:
-	cd apps/admin-ui && pnpm dev
+db-apply-migrations:
+	./scripts/db/apply_migrations.sh
+
+db-sync-blueprints:
+	./scripts/db/with_supabase_database_url.sh pnpm --dir apps/api db:sync-blueprints
+
+db-smoke-postgres:
+	DATA_STORE=postgres ./scripts/db/with_supabase_database_url.sh pnpm --dir apps/api smoke:postgres-store
+
+api-dev:
+	pnpm --dir apps/api dev
+
+admin-dev: web-dev
+
+web-dev:
+	pnpm --dir apps/web dev
 
 worker-dev:
-	cd apps/worker && uv run celery -A worker worker --loglevel=info
+	pnpm --dir apps/worker dev
 
 lint:
-	@echo "Run ruff/eslint after skeleton exists."
+	pnpm --dir apps/api lint
+	pnpm --dir apps/web lint
+	pnpm --dir apps/worker lint
+
+lint-backend:
+	pnpm --dir apps/api lint
+	pnpm --dir apps/worker lint
 
 typecheck:
-	@echo "Run mypy/tsc after skeleton exists."
+	pnpm --dir apps/api typecheck
+	pnpm --dir apps/web typecheck
+	pnpm --dir apps/worker typecheck
 
-test: test-api test-agents test-blueprints test-worker
+typecheck-backend:
+	pnpm --dir apps/api typecheck
+	pnpm --dir apps/worker typecheck
+
+test: test-api test-agents test-blueprints test-web test-worker
 
 test-api:
-	@echo "Run pytest apps/api/tests after API skeleton exists."
+	pnpm --dir apps/api test
+
+test-backend: test-api test-worker
 
 test-agents:
-	@echo "Run pytest packages/agents/tests after agent package exists."
+	pnpm --dir apps/api test:agents
 
 test-blueprints:
-	@echo "Run pytest packages/blueprints/tests after loader exists."
+	pnpm --dir apps/api test:blueprints
+
+test-web:
+	pnpm --dir apps/web test
 
 test-worker:
-	@echo "Run pytest apps/worker/tests after worker exists."
+	pnpm --dir apps/worker test
 
 format:
-	@echo "Run ruff format and frontend formatter after skeleton exists."
+	pnpm --dir apps/api typecheck
+	pnpm --dir apps/worker typecheck

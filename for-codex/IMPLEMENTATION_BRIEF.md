@@ -20,8 +20,8 @@ The MVP must support:
 ## Preferred stack
 
 ```text
-backend: FastAPI + Pydantic + SQLAlchemy/SQLModel
-worker: Celery or Dramatiq + Redis
+backend: TypeScript + Fastify + Zod + Drizzle
+worker: BullMQ + Redis
 frontend: Next.js
 storage: Supabase Postgres + pgvector
 llm: OpenAI-compatible gateway endpoint
@@ -86,13 +86,13 @@ LLM_GATEWAY_API_KEY=...
 
 ```text
 apps/api
-apps/admin-ui
+apps/web
 apps/worker
-packages/agents
-packages/llm
-packages/blueprints
-packages/app-generator
-packages/shared
+apps/api/src/agents
+apps/api/src/llm
+blueprints
+apps/api/src/services
+shared modules as needed later
 infra/k8s
 migrations
 ```
@@ -100,7 +100,7 @@ migrations
 ## Coding principles
 
 - Implement interfaces before complex behavior.
-- Use JSON schemas/Pydantic models.
+- Use JSON Schema/Zod models.
 - Keep agents small.
 - Keep prompts versioned.
 - Create audit log events for all approvals and agent runs.

@@ -1,0 +1,35 @@
+{
+  "name": "@localgrowth/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/src/server.js",
+    "build": "tsc -p tsconfig.json",
+    "db:generate": "drizzle-kit generate --config drizzle.config.ts",
+    "db:sync-blueprints": "tsx scripts/sync-blueprints.ts",
+    "smoke:postgres-store": "tsx scripts/smoke-postgres-store.ts",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:agents": "vitest run tests/llm.test.ts tests/agent-run-logger.test.ts tests/source-compliance-agent.test.ts tests/business-profile-agent.test.ts tests/proposal-agent.test.ts",
+    "test:blueprints": "vitest run tests/blueprints.test.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.0",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.38.4",
+    "fastify": "^5.2.0",
+    "postgres": "^3.4.9",
+    "yaml": "^2.6.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "drizzle-kit": "^0.30.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
