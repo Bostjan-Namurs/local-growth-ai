@@ -35,7 +35,9 @@ localgrowth-ai/
 
     worker/
       src/
+        hash.ts
         jobs.ts
+        processors.ts
         queue.ts
         worker.ts
       tests/

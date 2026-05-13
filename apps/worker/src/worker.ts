@@ -1,4 +1,5 @@
 import { listAllowedWorkerJobs, validateWorkerJob, type WorkerJob, type WorkerJobName } from "./jobs.js";
+import { processWorkerJob } from "./processors.js";
 import { loadWorkerQueueConfig, type WorkerQueueConfig } from "./queue.js";
 
 export interface WorkerHealth {
@@ -31,6 +32,10 @@ export function workerStatus(): string {
 
 export function acceptLocalWorkerJob(job: WorkerJob) {
   return validateWorkerJob(job, "local");
+}
+
+export function processLocalWorkerJob(job: WorkerJob) {
+  return processWorkerJob(job, "local");
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

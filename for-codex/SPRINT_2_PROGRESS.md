@@ -14,6 +14,7 @@ Status: in progress
 - Redis queue adapter is available behind explicit config, but default verification does not connect to Redis.
 - Worker job payloads now have runtime schemas before enqueue.
 - Prohibited job names, non-fake LLM mode, and approval-gated app spec generation remain blocked.
+- Deterministic worker processor stubs produce placeholder-only outputs with input hashes, output hashes, model aliases, approval status, and audit event payloads.
 
 ## Current Verification
 
@@ -30,7 +31,7 @@ API: 81 tests passed
 Blueprints: 9 tests passed
 Agents: 18 tests passed
 Web: 11 passed, 1 skipped because sandbox blocks the temporary Next route smoke server
-Worker: 8 tests passed
+Worker: 10 tests passed
 ```
 
 ## Safety State
@@ -47,5 +48,5 @@ Worker: 8 tests passed
 ## Next Backend Work
 
 - Add opt-in Redis smoke tests only after local Redis is intentionally started with `make dev-up`.
-- Add explicit worker processor stubs with audit logging before any real asynchronous workflow is enabled.
+- Persist worker audit events through the database-backed agent run logger before any real asynchronous workflow is enabled.
 - Keep API enqueue endpoints private/internal until authentication and approval boundaries are implemented.

@@ -5,7 +5,7 @@ import {
   createWorkerQueue,
   loadWorkerQueueConfig
 } from "../src/queue.js";
-import { acceptLocalWorkerJob, workerHealth, workerStatus } from "../src/worker.js";
+import { acceptLocalWorkerJob, processLocalWorkerJob, workerHealth, workerStatus } from "../src/worker.js";
 
 describe("worker queue foundation", () => {
   it("reports deterministic local health without queue connections", () => {
@@ -150,6 +150,70 @@ describe("worker queue foundation", () => {
     ).toMatchObject({
       status: "rejected",
       reason: "App spec generation requires stored approval before worker execution"
+    });
+  });
+
+  it("processes accepted jobs into audited deterministic stub outputs", () => {
+    const result = processLocalWorkerJob({
+      name: "business_profile_generate",
+      llmMode: "fake",
+      payload: { business_id: "business-1" }
+    });
+
+    expect(result).toMatchObject({
+      status: "completed",
+      jobName: "business_profile_generate",
+      queueIntegration: "local",
+      llmMode: "fake",
+      modelAlias: "profiler",
+      approvalStatus: "not_required",
+      output: {
+        profile_status: "stubbed",
+        business_id: "business-1",
+        generated_facts: [],
+        missing_data: ["customer_facts", "website_audit"]
+      },
+      auditEvent: {
+        eventType: "worker_job_completed",
+        payload: {
+          job_name: "business_profile_generate",
+          status: "completed",
+          queue_integration: "local",
+          llm_mode: "fake",
+          model_alias: "profiler",
+          approval_status: "not_required"
+        },
+        createdAt: new Date(0).toISOString()
+      },
+      completedAt: new Date(0).toISOString()
+    });
+    expect(result.inputHash).toHaveLength(64);
+    expect(result.outputHash).toHaveLength(64);
+    expect(result.auditEvent.payload.input_hash).toBe(result.inputHash);
+    expect(result.auditEvent.payload.output_hash).toBe(result.outputHash);
+  });
+
+  it("processes rejected jobs into audited rejection results", () => {
+    const result = processLocalWorkerJob({
+      name: "production_deploy" as never,
+      llmMode: "fake",
+      payload: { app_spec_id: "app-spec-1" }
+    });
+
+    expect(result).toMatchObject({
+      status: "rejected",
+      reason: "Worker job is prohibited in Sprint 2: production_deploy",
+      queueIntegration: "local",
+      llmMode: "fake",
+      auditEvent: {
+        eventType: "worker_job_rejected",
+        payload: {
+          status: "rejected",
+          reason: "Worker job is prohibited in Sprint 2: production_deploy",
+          queue_integration: "local",
+          llm_mode: "fake"
+        }
+      }
     });
   });
 });
