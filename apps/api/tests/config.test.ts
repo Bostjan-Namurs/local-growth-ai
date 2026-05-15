@@ -18,6 +18,9 @@ describe("config", () => {
     expect(settings.appEnv).toBe("local");
     expect(settings.dataStore).toBe("memory");
     expect(settings.llmMode).toBe("fake");
+    expect(settings.workerQueueMode).toBe("local");
+    expect(settings.workerQueueName).toBe("localgrowth.worker");
+    expect(settings.internalApiToken).toBeUndefined();
     expect(settings.enableRealOutreach).toBe(false);
     expect(settings.enableProductionDeploy).toBe(false);
     expect(settings.enableCodexHandoff).toBe(false);
@@ -32,11 +35,17 @@ describe("config", () => {
     const settings = getSettings({
       APP_ENV: "test",
       LLM_MODE: "gateway",
-      DATABASE_URL: "postgresql://localhost/test"
+      DATABASE_URL: "postgresql://localhost/test",
+      WORKER_QUEUE_MODE: "redis",
+      WORKER_QUEUE_NAME: "localgrowth.test",
+      INTERNAL_API_TOKEN: "test-token"
     });
 
     expect(settings.appEnv).toBe("test");
     expect(settings.llmMode).toBe("gateway");
+    expect(settings.workerQueueMode).toBe("redis");
+    expect(settings.workerQueueName).toBe("localgrowth.test");
+    expect(settings.internalApiToken).toBe("test-token");
     expect(databaseConfigured(settings)).toBe(true);
     expect(databaseIsLocal(settings)).toBe(true);
     expect(databaseConnectionKind(settings)).toBe("local");

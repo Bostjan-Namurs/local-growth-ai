@@ -56,4 +56,24 @@ describe("Sprint 1 safety contract", () => {
       await app.close();
     }
   });
+
+  it("does not expose worker enqueue as a public route", async () => {
+    const app = createApp();
+    try {
+      for (const url of ["/worker-jobs", "/jobs/enqueue", "/internal/worker-jobs"]) {
+        const response = await app.inject({
+          method: "POST",
+          url,
+          payload: {
+            name: "proposal_generate",
+            payload: { business_id: "business-1" }
+          }
+        });
+
+        expect(response.statusCode).toBe(404);
+      }
+    } finally {
+      await app.close();
+    }
+  });
 });

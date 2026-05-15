@@ -26,6 +26,7 @@ import {
   websiteAuditInputSchema
 } from "./services/businesses.js";
 import { createVerticalDraftStore, verticalDraftInputSchema } from "./services/vertical-drafts.js";
+import { createWorkerJobService, enqueueWorkerJobSchema } from "./services/worker-jobs.js";
 import { createWorkflowStore } from "./services/workflow-records.js";
 
 const sourceComplianceRunSchema = z.object({
@@ -41,6 +42,7 @@ export function createApp(settingsOverride?: Settings) {
   const workflow = createWorkflowStore(settings);
   const agentRuns = createAgentRunLogger(settings);
   const verticalDrafts = createVerticalDraftStore(settings);
+  const workerJobs = createWorkerJobService(agentRuns, settings);
 
   app.addHook("onClose", async () => {
     if ("close" in businesses && typeof businesses.close === "function") {
@@ -420,6 +422,19 @@ export function createApp(settingsOverride?: Settings) {
       const message = error instanceof Error ? error.message : "Unknown agent run error";
       return reply.status(404).send({ detail: message });
     }
+  });
+
+  app.post("/internal/worker-jobs", async (request, reply) => {
+    if (!settings.internalApiToken || request.headers["x-internal-api-token"] !== settings.internalApiToken) {
+      return reply.status(404).send({ detail: "Not found" });
+    }
+
+    const parsed = enqueueWorkerJobSchema.safeParse(request.body);
+    if (!parsed.success) {
+      return reply.status(400).send({ detail: parsed.error.issues[0]?.message ?? parsed.error.message });
+    }
+
+    return reply.status(201).send(await workerJobs.enqueue(parsed.data));
   });
 
   app.post("/approvals", async (request, reply) => {

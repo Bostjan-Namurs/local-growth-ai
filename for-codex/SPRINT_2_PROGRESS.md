@@ -1,6 +1,6 @@
 # Sprint 2 Progress
 
-Last updated: 2026-05-13
+Last updated: 2026-05-15
 
 Status: in progress
 
@@ -16,6 +16,8 @@ Status: in progress
 - Worker job payloads now have runtime schemas before enqueue.
 - Prohibited job names, non-fake LLM mode, and approval-gated app spec generation remain blocked.
 - Deterministic worker processor stubs produce placeholder-only outputs with input hashes, output hashes, model aliases, approval status, and audit event payloads.
+- API now exposes an authenticated internal-only worker enqueue boundary at `POST /internal/worker-jobs`.
+- Worker enqueue requests are persisted as queued `agent_runs` records with request metadata, model alias, approval status, and input hash.
 
 ## Current Verification
 
@@ -37,9 +39,9 @@ Current environment note: not run, because the `docker` CLI is unavailable in th
 Last result: passed.
 
 ```text
-API: 81 tests passed
+API: 87 tests passed
 Blueprints: 9 tests passed
-Agents: 18 tests passed
+Agents: 19 tests passed
 Web: 11 passed, 1 skipped because sandbox blocks the temporary Next route smoke server
 Worker: 10 tests passed
 ```
@@ -58,5 +60,5 @@ Worker: 10 tests passed
 ## Next Backend Work
 
 - Run `make test-worker-redis` when local Docker Redis is intentionally started with `make dev-up`.
-- Persist worker audit events through the database-backed agent run logger before any real asynchronous workflow is enabled.
+- Persist worker completion events through the database-backed agent run logger before any real asynchronous workflow is enabled.
 - Keep API enqueue endpoints private/internal until authentication and approval boundaries are implemented.

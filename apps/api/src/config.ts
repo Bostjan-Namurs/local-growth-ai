@@ -30,6 +30,8 @@ const settingsSchema = z.object({
   supabaseAnonKey: z.string().optional(),
   supabaseServiceRoleKey: z.string().optional(),
   redisUrl: z.string().optional(),
+  workerQueueMode: z.enum(["local", "redis"]).default("local"),
+  workerQueueName: z.string().default("localgrowth.worker"),
   dataStore: z.enum(["memory", "postgres"]).default("memory"),
   llmMode: z.enum(["fake", "gateway"]).default("fake"),
   llmGatewayBaseUrl: z.string().default("http://localhost:4000/v1"),
@@ -43,6 +45,7 @@ const settingsSchema = z.object({
   llmModelCoder: z.string().default("coder"),
   llmModelJudge: z.string().default("judge"),
   llmModelEmbedding: z.string().default("embedding"),
+  internalApiToken: z.string().optional(),
   enableRealOutreach: envBoolean.default(false),
   enableProductionDeploy: envBoolean.default(false),
   enableCodexHandoff: envBoolean.default(false)
@@ -64,6 +67,8 @@ export function getSettings(env: NodeJS.ProcessEnv = process.env): Settings {
     supabaseAnonKey: env.SUPABASE_ANON_KEY,
     supabaseServiceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY,
     redisUrl: env.REDIS_URL,
+    workerQueueMode: env.WORKER_QUEUE_MODE,
+    workerQueueName: env.WORKER_QUEUE_NAME,
     dataStore: env.DATA_STORE,
     llmMode: env.LLM_MODE,
     llmGatewayBaseUrl: env.LLM_GATEWAY_BASE_URL,
@@ -77,6 +82,7 @@ export function getSettings(env: NodeJS.ProcessEnv = process.env): Settings {
     llmModelCoder: env.LLM_MODEL_CODER,
     llmModelJudge: env.LLM_MODEL_JUDGE,
     llmModelEmbedding: env.LLM_MODEL_EMBEDDING,
+    internalApiToken: env.INTERNAL_API_TOKEN,
     enableRealOutreach: env.ENABLE_REAL_OUTREACH,
     enableProductionDeploy: env.ENABLE_PRODUCTION_DEPLOY,
     enableCodexHandoff: env.ENABLE_CODEX_HANDOFF

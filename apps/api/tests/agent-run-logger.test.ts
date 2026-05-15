@@ -2,6 +2,26 @@ import { describe, expect, it } from "vitest";
 import { InMemoryAgentRunLogger, agentRunMetadataFromJson } from "../src/agents/run-logger.js";
 
 describe("agent run logger", () => {
+  it("records queued runs for worker enqueue audit", () => {
+    const logger = new InMemoryAgentRunLogger();
+    const run = logger.queue({
+      agentName: "Worker:proposal_generate",
+      inputHash: "queued-hash",
+      modelAlias: "proposal_writer",
+      metadata: { job_name: "proposal_generate" }
+    });
+
+    expect(run.status).toBe("queued");
+    expect(run.events.map((event) => event.eventType)).toEqual(["agent_run_queued"]);
+    expect(logger.toLogEvent(run)).toMatchObject({
+      agent_name: "Worker:proposal_generate",
+      status: "queued",
+      input_hash: "queued-hash",
+      model_alias: "proposal_writer",
+      metadata: { job_name: "proposal_generate" }
+    });
+  });
+
   it("records auditable start and finish events", () => {
     const logger = new InMemoryAgentRunLogger();
     const run = logger.start({
