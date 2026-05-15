@@ -64,6 +64,7 @@ export function createApp(settingsOverride?: Settings) {
     if ("close" in verticalDrafts && typeof verticalDrafts.close === "function") {
       await verticalDrafts.close();
     }
+    await workerJobs.close();
   });
 
   void app.register(cors, {
@@ -438,7 +439,12 @@ export function createApp(settingsOverride?: Settings) {
       return reply.status(400).send({ detail: parsed.error.issues[0]?.message ?? parsed.error.message });
     }
 
-    return reply.status(201).send(await workerJobs.enqueue(parsed.data));
+    try {
+      return reply.status(201).send(await workerJobs.enqueue(parsed.data));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown worker queue enqueue error";
+      return reply.status(500).send({ detail: message });
+    }
   });
 
   app.post<{ Params: { runId: string } }>("/internal/worker-jobs/:runId/result", async (request, reply) => {

@@ -13,6 +13,9 @@ importers:
       '@fastify/cors':
         specifier: ^10.0.0
         version: 10.1.0
+      bullmq:
+        specifier: ^5.76.8
+        version: 5.76.8
       dotenv:
         specifier: ^16.4.7
         version: 16.6.1
@@ -22,6 +25,9 @@ importers:
       fastify:
         specifier: ^5.2.0
         version: 5.8.5
+      ioredis:
+        specifier: ^5.10.1
+        version: 5.10.1
       postgres:
         specifier: ^3.4.9
         version: 3.4.9
