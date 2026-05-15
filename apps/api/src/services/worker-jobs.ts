@@ -83,6 +83,24 @@ export const enqueueWorkerJobSchema = z
 
 export type EnqueueWorkerJobInput = z.infer<typeof enqueueWorkerJobSchema>;
 
+export const workerJobResultSchema = z
+  .object({
+    status: z.enum(["completed", "failed", "needs_review"]),
+    output: z.record(z.unknown()).default({}),
+    outputHash: z.string().min(1).optional(),
+    error: z.string().optional(),
+    auditEvent: z
+      .object({
+        eventType: z.string().min(1),
+        payload: z.record(z.unknown()).default({}),
+        createdAt: z.string().optional()
+      })
+      .optional()
+  })
+  .strict();
+
+export type WorkerJobResultInput = z.infer<typeof workerJobResultSchema>;
+
 export interface QueuedWorkerJobResponse {
   id: string;
   status: "queued";
@@ -99,6 +117,16 @@ export interface QueuedWorkerJobResponse {
 
 export interface WorkerJobEnqueueResponse {
   worker_job: QueuedWorkerJobResponse;
+  agent_run: AgentRun;
+}
+
+export interface WorkerJobResultResponse {
+  worker_job: {
+    id: string;
+    status: WorkerJobResultInput["status"];
+    outputHash: string;
+    agentRunId: string;
+  };
   agent_run: AgentRun;
 }
 
@@ -149,6 +177,33 @@ export class WorkerJobService {
         inputHash,
         agentRunId: run.id,
         auditEvent: this.agentRuns.toLogEvent(run)
+      },
+      agent_run: run
+    };
+  }
+
+  public async recordResult(runId: string, input: WorkerJobResultInput): Promise<WorkerJobResultResponse> {
+    const outputHash = input.outputHash ?? stableHash(input.output);
+    const run = await this.agentRuns.finish({
+      runId,
+      outputHash,
+      status: input.status,
+      metadata: {
+        worker_result: {
+          status: input.status,
+          output: input.output,
+          error: input.error
+        },
+        worker_audit_event: input.auditEvent
+      }
+    });
+
+    return {
+      worker_job: {
+        id: run.id,
+        status: input.status,
+        outputHash,
+        agentRunId: run.id
       },
       agent_run: run
     };

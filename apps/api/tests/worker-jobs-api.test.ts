@@ -86,6 +86,93 @@ describe("internal worker job enqueue API", () => {
     }
   });
 
+  it("records worker result metadata on the queued agent run", async () => {
+    const app = createInternalApp();
+    try {
+      const enqueue = await app.inject({
+        method: "POST",
+        url: "/internal/worker-jobs",
+        headers: { "x-internal-api-token": internalToken },
+        payload: {
+          name: "business_profile_generate",
+          payload: { business_id: "business-1" }
+        }
+      });
+
+      const result = await app.inject({
+        method: "POST",
+        url: `/internal/worker-jobs/${enqueue.json().worker_job.agentRunId}/result`,
+        headers: { "x-internal-api-token": internalToken },
+        payload: {
+          status: "completed",
+          output: {
+            profile_status: "stubbed",
+            business_id: "business-1",
+            missing_data: ["customer_facts"]
+          },
+          auditEvent: {
+            eventType: "worker_job_completed",
+            payload: {
+              job_name: "business_profile_generate",
+              status: "completed",
+              llm_mode: "fake"
+            }
+          }
+        }
+      });
+
+      expect(result.statusCode).toBe(200);
+      expect(result.json().worker_job).toMatchObject({
+        id: enqueue.json().worker_job.agentRunId,
+        status: "completed",
+        agentRunId: enqueue.json().worker_job.agentRunId
+      });
+      expect(result.json().worker_job.outputHash).toHaveLength(64);
+      expect(result.json().agent_run).toMatchObject({
+        status: "completed",
+        outputHash: result.json().worker_job.outputHash,
+        metadata: {
+          worker_result: {
+            status: "completed",
+            output: {
+              profile_status: "stubbed",
+              business_id: "business-1",
+              missing_data: ["customer_facts"]
+            }
+          },
+          worker_audit_event: {
+            eventType: "worker_job_completed",
+            payload: {
+              job_name: "business_profile_generate",
+              status: "completed",
+              llm_mode: "fake"
+            }
+          }
+        }
+      });
+    } finally {
+      await app.close();
+    }
+  });
+
+  it("hides worker result reporting without the internal token", async () => {
+    const app = createInternalApp();
+    try {
+      const response = await app.inject({
+        method: "POST",
+        url: "/internal/worker-jobs/run-1/result",
+        payload: {
+          status: "completed",
+          output: {}
+        }
+      });
+
+      expect(response.statusCode).toBe(404);
+    } finally {
+      await app.close();
+    }
+  });
+
   it("rejects prohibited worker jobs before audit records are created", async () => {
     const app = createInternalApp();
     try {

@@ -60,7 +60,12 @@ describe("Sprint 1 safety contract", () => {
   it("does not expose worker enqueue as a public route", async () => {
     const app = createApp();
     try {
-      for (const url of ["/worker-jobs", "/jobs/enqueue", "/internal/worker-jobs"]) {
+      for (const url of [
+        "/worker-jobs",
+        "/jobs/enqueue",
+        "/internal/worker-jobs",
+        "/internal/worker-jobs/run-1/result"
+      ]) {
         const response = await app.inject({
           method: "POST",
           url,

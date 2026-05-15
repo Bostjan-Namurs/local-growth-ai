@@ -18,6 +18,7 @@ Status: in progress
 - Deterministic worker processor stubs produce placeholder-only outputs with input hashes, output hashes, model aliases, approval status, and audit event payloads.
 - API now exposes an authenticated internal-only worker enqueue boundary at `POST /internal/worker-jobs`.
 - Worker enqueue requests are persisted as queued `agent_runs` records with request metadata, model alias, approval status, and input hash.
+- Worker result reports are accepted only on the internal boundary and update the queued `agent_runs` record with output hash, result metadata, and worker audit event payloads.
 
 ## Current Verification
 
@@ -39,7 +40,7 @@ Current environment note: not run, because the `docker` CLI is unavailable in th
 Last result: passed.
 
 ```text
-API: 87 tests passed
+API: 89 tests passed
 Blueprints: 9 tests passed
 Agents: 19 tests passed
 Web: 11 passed, 1 skipped because sandbox blocks the temporary Next route smoke server

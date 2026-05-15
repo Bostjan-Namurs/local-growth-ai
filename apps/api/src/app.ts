@@ -26,7 +26,11 @@ import {
   websiteAuditInputSchema
 } from "./services/businesses.js";
 import { createVerticalDraftStore, verticalDraftInputSchema } from "./services/vertical-drafts.js";
-import { createWorkerJobService, enqueueWorkerJobSchema } from "./services/worker-jobs.js";
+import {
+  createWorkerJobService,
+  enqueueWorkerJobSchema,
+  workerJobResultSchema
+} from "./services/worker-jobs.js";
 import { createWorkflowStore } from "./services/workflow-records.js";
 
 const sourceComplianceRunSchema = z.object({
@@ -435,6 +439,24 @@ export function createApp(settingsOverride?: Settings) {
     }
 
     return reply.status(201).send(await workerJobs.enqueue(parsed.data));
+  });
+
+  app.post<{ Params: { runId: string } }>("/internal/worker-jobs/:runId/result", async (request, reply) => {
+    if (!settings.internalApiToken || request.headers["x-internal-api-token"] !== settings.internalApiToken) {
+      return reply.status(404).send({ detail: "Not found" });
+    }
+
+    const parsed = workerJobResultSchema.safeParse(request.body);
+    if (!parsed.success) {
+      return reply.status(400).send({ detail: parsed.error.issues[0]?.message ?? parsed.error.message });
+    }
+
+    try {
+      return reply.send(await workerJobs.recordResult(request.params.runId, parsed.data));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown worker job result error";
+      return reply.status(404).send({ detail: message });
+    }
   });
 
   app.post("/approvals", async (request, reply) => {
