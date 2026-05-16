@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { createApp } from "../src/app.js";
+import { getSettings } from "../src/config.js";
 
 describe("Sprint 1 Task 2 API contract", () => {
   it("serves config health, version, and blueprint registry endpoints in fake mode", async () => {
-    const app = createApp();
+    const app = createApp(getSettings({}));
 
     const health = await app.inject({ method: "GET", url: "/health" });
     expect(health.statusCode).toBe(200);
