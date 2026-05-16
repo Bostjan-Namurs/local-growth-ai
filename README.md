@@ -72,6 +72,17 @@ make db-smoke-postgres
 
 These targets prompt for the database password unless `DATABASE_URL` is already set. Do not write real Supabase passwords into committed files.
 
+Optional worker Redis end-to-end smoke:
+
+```bash
+make dev-up
+INTERNAL_API_TOKEN=replace_me_local_only WORKER_QUEUE_MODE=redis REDIS_URL=redis://localhost:6379/0 make api-dev
+INTERNAL_API_TOKEN=replace_me_local_only WORKER_QUEUE_MODE=redis REDIS_URL=redis://localhost:6379/0 API_BASE_URL=http://localhost:8000 make worker-dev
+INTERNAL_API_TOKEN=replace_me_local_only API_BASE_URL=http://localhost:8000 make smoke-worker-e2e
+```
+
+Run the API and worker commands in separate terminals. This smoke is intentionally not part of `./verify_macos.sh`.
+
 Expected endpoints:
 
 ```text
