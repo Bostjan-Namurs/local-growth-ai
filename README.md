@@ -34,7 +34,7 @@ Implemented in this scaffold:
 - SourceComplianceAgent, BusinessProfileAgent, ProposalAgent, and AppSpecAgent skeletons;
 - backend tests;
 - Next.js admin scaffold with dashboard, lead, approval, agent-run, app, business-type, and settings routes;
-- TypeScript worker scaffold;
+- TypeScript worker queue foundation with local fake-mode default and opt-in BullMQ/Redis readiness;
 - SQL migrations copied from documentation;
 - bike rental blueprint files.
 
@@ -47,7 +47,8 @@ Not implemented yet:
 - production deployment.
 
 Current implementation progress is tracked in
-[`for-codex/SPRINT_1_PROGRESS.md`](for-codex/SPRINT_1_PROGRESS.md).
+[`for-codex/SPRINT_1_PROGRESS.md`](for-codex/SPRINT_1_PROGRESS.md) and
+[`for-codex/SPRINT_2_PROGRESS.md`](for-codex/SPRINT_2_PROGRESS.md).
 
 ## Local quick start
 

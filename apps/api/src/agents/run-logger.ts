@@ -3,7 +3,7 @@ import { type Settings } from "../config.js";
 import { createDbForSqlClient, createSqlClient } from "../db/index.js";
 import { agentRuns, type AgentRunRecord } from "../db/schema.js";
 
-export type AgentRunStatus = "running" | "completed" | "failed";
+export type AgentRunStatus = "queued" | "running" | "completed" | "failed" | "needs_review";
 export type ApprovalStatus = "not_required" | "pending" | "approved" | "rejected";
 
 export interface AgentRunEvent {
@@ -31,6 +31,13 @@ export interface AgentRun {
 type MaybePromise<T> = T | Promise<T>;
 
 export interface AgentRunLogger {
+  queue(args: {
+    agentName: string;
+    inputHash: string;
+    modelAlias?: string;
+    approvalStatus?: ApprovalStatus;
+    metadata?: Record<string, unknown>;
+  }): MaybePromise<AgentRun>;
   start(args: {
     agentName: string;
     inputHash: string;
@@ -54,6 +61,19 @@ export interface AgentRunLogger {
 export class InMemoryAgentRunLogger implements AgentRunLogger {
   readonly runs: AgentRun[] = [];
 
+  queue(args: {
+    agentName: string;
+    inputHash: string;
+    modelAlias?: string;
+    approvalStatus?: ApprovalStatus;
+    metadata?: Record<string, unknown>;
+  }): AgentRun {
+    const run = this.createRun(args, "queued");
+    this.appendEvent(run, "agent_run_queued", this.toLogEvent(run));
+    this.runs.push(run);
+    return run;
+  }
+
   start(args: {
     agentName: string;
     inputHash: string;
@@ -61,19 +81,7 @@ export class InMemoryAgentRunLogger implements AgentRunLogger {
     approvalStatus?: ApprovalStatus;
     metadata?: Record<string, unknown>;
   }): AgentRun {
-    const now = new Date().toISOString();
-    const run: AgentRun = {
-      id: crypto.randomUUID(),
-      agentName: args.agentName,
-      inputHash: args.inputHash,
-      modelAlias: args.modelAlias,
-      approvalStatus: args.approvalStatus ?? "not_required",
-      status: "running",
-      metadata: args.metadata ?? {},
-      createdAt: now,
-      updatedAt: now,
-      events: []
-    };
+    const run = this.createRun(args, "running");
     this.appendEvent(run, "agent_run_started", this.toLogEvent(run));
     this.runs.push(run);
     return run;
@@ -141,6 +149,31 @@ export class InMemoryAgentRunLogger implements AgentRunLogger {
       createdAt: new Date().toISOString()
     });
   }
+
+  private createRun(
+    args: {
+      agentName: string;
+      inputHash: string;
+      modelAlias?: string;
+      approvalStatus?: ApprovalStatus;
+      metadata?: Record<string, unknown>;
+    },
+    status: Extract<AgentRunStatus, "queued" | "running">
+  ): AgentRun {
+    const now = new Date().toISOString();
+    return {
+      id: crypto.randomUUID(),
+      agentName: args.agentName,
+      inputHash: args.inputHash,
+      modelAlias: args.modelAlias,
+      approvalStatus: args.approvalStatus ?? "not_required",
+      status,
+      metadata: args.metadata ?? {},
+      createdAt: now,
+      updatedAt: now,
+      events: []
+    };
+  }
 }
 
 export class PostgresAgentRunLogger implements AgentRunLogger {
@@ -150,6 +183,28 @@ export class PostgresAgentRunLogger implements AgentRunLogger {
   constructor(settings: Settings) {
     this.sql = createSqlClient(settings);
     this.db = createDbForSqlClient(this.sql);
+  }
+
+  async queue(args: {
+    agentName: string;
+    inputHash: string;
+    modelAlias?: string;
+    approvalStatus?: ApprovalStatus;
+    metadata?: Record<string, unknown>;
+  }): Promise<AgentRun> {
+    const [record] = await this.db
+      .insert(agentRuns)
+      .values({
+        agentName: args.agentName,
+        inputHash: args.inputHash,
+        modelAlias: args.modelAlias,
+        approvalStatus: args.approvalStatus ?? "not_required",
+        inputJson: args.metadata ?? {},
+        status: "queued"
+      })
+      .returning();
+
+    return this.withEvent(agentRunFromRow(record), "agent_run_queued");
   }
 
   async start(args: {
@@ -283,7 +338,15 @@ function jsonRecord(value: unknown): Record<string, unknown> {
 }
 
 function agentRunStatusFromDb(status: AgentRunRecord["status"]): AgentRunStatus {
-  if (status === "completed" || status === "failed") return status;
+  if (
+    status === "queued" ||
+    status === "running" ||
+    status === "completed" ||
+    status === "failed" ||
+    status === "needs_review"
+  ) {
+    return status;
+  }
   return "running";
 }
 

@@ -66,8 +66,8 @@ make db-smoke-postgres: passed, persisted agent runs verified
 
 ## Next Backend Work
 
-Sprint 2 must not begin until this Sprint 1 completion state is reviewed.
+Sprint 2 has started from this reviewed Sprint 1 completion state. Current progress is tracked in `for-codex/SPRINT_2_PROGRESS.md`.
 
 - Keep backend changes small and reviewable.
 - Prefer readiness, auditability, and contract coverage over full product features.
-- Keep worker queue integration deferred until Redis/BullMQ is introduced with local-only tests.
+- Keep Redis/BullMQ live processing opt-in and covered by local-only default tests.

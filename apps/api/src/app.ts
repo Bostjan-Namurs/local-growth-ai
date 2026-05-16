@@ -26,6 +26,11 @@ import {
   websiteAuditInputSchema
 } from "./services/businesses.js";
 import { createVerticalDraftStore, verticalDraftInputSchema } from "./services/vertical-drafts.js";
+import {
+  createWorkerJobService,
+  enqueueWorkerJobSchema,
+  workerJobResultSchema
+} from "./services/worker-jobs.js";
 import { createWorkflowStore } from "./services/workflow-records.js";
 
 const sourceComplianceRunSchema = z.object({
@@ -41,6 +46,7 @@ export function createApp(settingsOverride?: Settings) {
   const workflow = createWorkflowStore(settings);
   const agentRuns = createAgentRunLogger(settings);
   const verticalDrafts = createVerticalDraftStore(settings);
+  const workerJobs = createWorkerJobService(agentRuns, settings);
 
   app.addHook("onClose", async () => {
     if ("close" in businesses && typeof businesses.close === "function") {
@@ -58,6 +64,7 @@ export function createApp(settingsOverride?: Settings) {
     if ("close" in verticalDrafts && typeof verticalDrafts.close === "function") {
       await verticalDrafts.close();
     }
+    await workerJobs.close();
   });
 
   void app.register(cors, {
@@ -418,6 +425,42 @@ export function createApp(settingsOverride?: Settings) {
       return await agentRuns.get(request.params.runId);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown agent run error";
+      return reply.status(404).send({ detail: message });
+    }
+  });
+
+  app.post("/internal/worker-jobs", async (request, reply) => {
+    if (!settings.internalApiToken || request.headers["x-internal-api-token"] !== settings.internalApiToken) {
+      return reply.status(404).send({ detail: "Not found" });
+    }
+
+    const parsed = enqueueWorkerJobSchema.safeParse(request.body);
+    if (!parsed.success) {
+      return reply.status(400).send({ detail: parsed.error.issues[0]?.message ?? parsed.error.message });
+    }
+
+    try {
+      return reply.status(201).send(await workerJobs.enqueue(parsed.data));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown worker queue enqueue error";
+      return reply.status(500).send({ detail: message });
+    }
+  });
+
+  app.post<{ Params: { runId: string } }>("/internal/worker-jobs/:runId/result", async (request, reply) => {
+    if (!settings.internalApiToken || request.headers["x-internal-api-token"] !== settings.internalApiToken) {
+      return reply.status(404).send({ detail: "Not found" });
+    }
+
+    const parsed = workerJobResultSchema.safeParse(request.body);
+    if (!parsed.success) {
+      return reply.status(400).send({ detail: parsed.error.issues[0]?.message ?? parsed.error.message });
+    }
+
+    try {
+      return reply.send(await workerJobs.recordResult(request.params.runId, parsed.data));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown worker job result error";
       return reply.status(404).send({ detail: message });
     }
   });

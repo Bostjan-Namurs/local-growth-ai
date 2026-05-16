@@ -35,7 +35,11 @@ localgrowth-ai/
 
     worker/
       src/
+        consumer.ts
+        hash.ts
         jobs.ts
+        processors.ts
+        queue.ts
         worker.ts
       tests/
       package.json
@@ -60,9 +64,9 @@ localgrowth-ai/
 ```text
 apps/web       -> API contracts and read-only facade data
 apps/api       -> local agents, LLM adapter, Drizzle schema, blueprint loader
-apps/worker    -> local fake-mode job contract only during Sprint 1
+apps/worker    -> local fake-mode queue contract with opt-in BullMQ/Redis adapter
 blueprints     -> loaded by apps/api services
 migrations     -> applied by scripts/db/apply_migrations.sh
 ```
 
-Frontend must not import backend internals directly. Production queue, LLM gateway, Rancher deployment, and outreach integrations remain outside Sprint 1.
+Frontend must not import backend internals directly. Real LLM gateway, Rancher deployment, and outreach integrations remain outside the current backend worker foundation.

@@ -1,4 +1,4 @@
-.PHONY: help install dev dev-up dev-down db-apply-migrations db-check-supabase db-smoke-postgres db-sync-blueprints test test-api test-agents test-backend test-blueprints test-web test-worker lint lint-backend typecheck typecheck-backend format api-dev admin-dev web-dev worker-dev
+.PHONY: help install dev dev-up dev-down db-apply-migrations db-check-supabase db-smoke-postgres db-sync-blueprints test test-api test-agents test-backend test-blueprints test-web test-worker test-worker-redis lint lint-backend typecheck typecheck-backend format api-dev admin-dev web-dev worker-dev
 
 help:
 	@printf "%s\n" "LocalGrowth AI commands"
@@ -28,6 +28,7 @@ help:
 	@printf "%s\n" "  make test-agents          Run agent tests"
 	@printf "%s\n" "  make test-web             Run admin web tests"
 	@printf "%s\n" "  make test-worker          Run worker tests"
+	@printf "%s\n" "  make test-worker-redis    Run opt-in worker Redis smoke test after make dev-up"
 
 dev: dev-up
 
@@ -106,6 +107,9 @@ test-web:
 
 test-worker:
 	pnpm --dir apps/worker test
+
+test-worker-redis:
+	pnpm --dir apps/worker test:redis
 
 format:
 	pnpm --dir apps/api typecheck

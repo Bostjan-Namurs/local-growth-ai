@@ -9,12 +9,18 @@
     "build": "tsc -p tsconfig.json",
     "lint": "tsc -p tsconfig.json --noEmit",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:redis": "vitest run tests/redis-smoke.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "bullmq": "^5.76.8",
+    "ioredis": "^5.10.1",
+    "zod": "^3.24.1"
   }
 }

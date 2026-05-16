@@ -5,7 +5,7 @@ import { expectedMigrationVersions, publicAppTableNames, schema } from "../src/d
 
 describe("system routes", () => {
   it("returns health", async () => {
-    const app = createApp();
+    const app = createApp(getSettings({}));
     const response = await app.inject({ method: "GET", url: "/health" });
 
     expect(response.statusCode).toBe(200);
