@@ -1,6 +1,7 @@
 import { listAllowedWorkerJobs, validateWorkerJob, type WorkerJob, type WorkerJobName } from "./jobs.js";
 import { processWorkerJob } from "./processors.js";
 import { loadWorkerQueueConfig, type WorkerQueueConfig } from "./queue.js";
+import { createRedisWorkerConsumer, loadWorkerConsumerConfig } from "./consumer.js";
 
 export interface WorkerHealth {
   status: "ok";
@@ -39,5 +40,20 @@ export function processLocalWorkerJob(job: WorkerJob) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  console.log(JSON.stringify(workerHealth(), null, 2));
+  const consumerConfig = loadWorkerConsumerConfig();
+  if (consumerConfig.mode === "redis") {
+    await createRedisWorkerConsumer(consumerConfig);
+    console.log(
+      JSON.stringify(
+        {
+          ...workerHealth(),
+          message: "LocalGrowth Redis worker consumer started in fake LLM mode."
+        },
+        null,
+        2
+      )
+    );
+  } else {
+    console.log(JSON.stringify(workerHealth(), null, 2));
+  }
 }

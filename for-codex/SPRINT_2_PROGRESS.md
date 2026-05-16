@@ -20,6 +20,7 @@ Status: in progress
 - Worker enqueue requests are persisted as queued `agent_runs` records with request metadata, model alias, approval status, and input hash.
 - API worker enqueue publishes to BullMQ only when `WORKER_QUEUE_MODE=redis`, and the Redis payload includes the queued `agentRunId`.
 - Worker result reports are accepted only on the internal boundary and update the queued `agent_runs` record with output hash, result metadata, and worker audit event payloads.
+- Worker has an opt-in Redis consumer that processes BullMQ payloads with deterministic fake processors and posts results to the internal API result endpoint.
 
 ## Current Verification
 
@@ -45,7 +46,7 @@ API: 93 tests passed
 Blueprints: 9 tests passed
 Agents: 19 tests passed
 Web: 11 passed, 1 skipped because sandbox blocks the temporary Next route smoke server
-Worker: 10 tests passed
+Worker: 17 tests passed
 ```
 
 ## Safety State
@@ -62,5 +63,5 @@ Worker: 10 tests passed
 ## Next Backend Work
 
 - Run `make test-worker-redis` when local Docker Redis is intentionally started with `make dev-up`.
-- Persist worker completion events through the database-backed agent run logger before any real asynchronous workflow is enabled.
+- Run a live end-to-end Redis worker smoke only when Docker Redis and the local API are intentionally running.
 - Keep API enqueue endpoints private/internal until authentication and approval boundaries are implemented.

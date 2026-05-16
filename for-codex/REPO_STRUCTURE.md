@@ -35,6 +35,7 @@ localgrowth-ai/
 
     worker/
       src/
+        consumer.ts
         hash.ts
         jobs.ts
         processors.ts
