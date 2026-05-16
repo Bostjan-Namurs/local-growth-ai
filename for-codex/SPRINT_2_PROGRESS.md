@@ -21,6 +21,7 @@ Status: in progress
 - API worker enqueue publishes to BullMQ only when `WORKER_QUEUE_MODE=redis`, and the Redis payload includes the queued `agentRunId`.
 - Worker result reports are accepted only on the internal boundary and update the queued `agent_runs` record with output hash, result metadata, and worker audit event payloads.
 - Worker has an opt-in Redis consumer that processes BullMQ payloads with deterministic fake processors and posts results to the internal API result endpoint.
+- `make smoke-worker-e2e` documents and runs the opt-in live API -> Redis -> worker -> API completion smoke when local services are intentionally running.
 
 ## Current Verification
 

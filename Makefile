@@ -1,4 +1,4 @@
-.PHONY: help install dev dev-up dev-down db-apply-migrations db-check-supabase db-smoke-postgres db-sync-blueprints test test-api test-agents test-backend test-blueprints test-web test-worker test-worker-redis lint lint-backend typecheck typecheck-backend format api-dev admin-dev web-dev worker-dev
+.PHONY: help install dev dev-up dev-down db-apply-migrations db-check-supabase db-smoke-postgres db-sync-blueprints smoke-worker-e2e test test-api test-agents test-backend test-blueprints test-web test-worker test-worker-redis lint lint-backend typecheck typecheck-backend format api-dev admin-dev web-dev worker-dev
 
 help:
 	@printf "%s\n" "LocalGrowth AI commands"
@@ -18,6 +18,7 @@ help:
 	@printf "%s\n" "  make db-apply-migrations  Prompt and apply/baseline DB migrations"
 	@printf "%s\n" "  make db-sync-blueprints   Prompt and sync blueprint catalog rows"
 	@printf "%s\n" "  make db-smoke-postgres    Prompt and run Postgres persistence smoke"
+	@printf "%s\n" "  make smoke-worker-e2e     Run opt-in API -> Redis -> worker -> API smoke"
 	@printf "%s\n" ""
 	@printf "%s\n" "Verification:"
 	@printf "%s\n" "  make lint                 TypeScript lint/type checks"
@@ -49,6 +50,9 @@ db-sync-blueprints:
 
 db-smoke-postgres:
 	DATA_STORE=postgres ./scripts/db/with_supabase_database_url.sh pnpm --dir apps/api smoke:postgres-store
+
+smoke-worker-e2e:
+	node scripts/smoke-worker-e2e.mjs
 
 install:
 	pnpm install
